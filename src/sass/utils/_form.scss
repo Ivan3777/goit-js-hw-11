@@ -19,20 +19,18 @@
 }
 
 .form .search-form {
-  // position: absolute;
   width: auto;
   align-items: center;
   justify-content: center;
 }
 
 .form input {
-  // position: absolute;
   width: 300px;
   height: 42px;
   padding-left: 15px;
   border-radius: 42px;
   border: 2px solid #324b4e;
-  background: #f9f0da;
+  background: #fff;
   outline: none;
   position: relative;
   transition: 0.3s linear;
