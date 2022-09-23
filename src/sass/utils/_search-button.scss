@@ -1,0 +1,16 @@
+.search-btn {
+  height: 42px;
+  width: 100px;
+  border-radius: 42px;
+  border: 2px solid #324b4e;
+  background: #fff;
+  outline: none;
+
+  margin-left: 20px;
+
+  &:hover,
+  &:focus {
+    background-color: rgb(219, 219, 219);
+  }
+}
+
