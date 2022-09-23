@@ -6,6 +6,7 @@ body {
   line-height: 1.5;
   background-image: url(../images/moon-g7a3821d67_1920.jpg);
   background-size: cover;
+  background-attachment: fixed;
 }
 
 .form::after {
