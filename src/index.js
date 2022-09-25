@@ -94,18 +94,20 @@ function renderGallery(elements) {
   const simpleLightbox = new SimpleLightbox('.gallery a');
 }
 
-const form = document.querySelector('.form');
+// const headerEl = document.querySelector('form.form');
 
-let previousPosition = 0;
+// let previousPosition = 0;
 
-const onPageScroll = () => {
-  if (previousPosition < window.scrollY - 50 && window.scrollY > 80)
-    form.classList.add('is-hidden');
-  if (previousPosition > window.scrollY + 200 || window.scrollY < 80)
-    form.classList.remove('is-hidden');
+// const onPageScroll = () => {
+//   if (previousPosition < window.scrollY - 50 && window.scrollY > 80)
+//   headerEl.classList.add('is-hidden');
+//   if (previousPosition > window.scrollY + 200 || window.scrollY < 80)
+//   headerEl.classList.remove('is-hidden');
 
-  previousPosition = window.scrollY;
+//   previousPosition = window.scrollY;
 
-  document.addEventListener('scroll', throttle(onPageScroll, 200));
+//   window.addEventListener('scroll', throttle(onPageScroll, 200));
 
-};
+// };
+
+
