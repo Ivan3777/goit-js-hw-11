@@ -93,3 +93,14 @@ function renderGallery(elements) {
       refs.divEl.insertAdjacentHTML('beforeend', markup)
       const simpleLightbox = new SimpleLightbox('.gallery a');
     }
+
+    const headerRef = document.querySelector('header.header');
+
+let previousPosition = 0;
+
+const onPageScroll = () => {
+  if (previousPosition < window.scrollY - 50 && window.scrollY > 80) headerRef.classList.add('is-hidden');
+  if (previousPosition > window.scrollY + 200 || window.scrollY < 80) headerRef.classList.remove('is-hidden');
+
+  previousPosition = window.scrollY;
+};

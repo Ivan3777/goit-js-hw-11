@@ -9,6 +9,7 @@ body {
   background-attachment: fixed;
   background-repeat: no-repeat;
   background-position: center;
+  padding-top: 102px;
 }
 
 .form::after {
@@ -64,4 +65,11 @@ body {
 }
 .search-btn:hover, .search-btn:focus {
   background-color: rgb(219, 219, 219);
+}
+
+.gallery {
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  flex-wrap: wrap;
 }/*# sourceMappingURL=index.css.map */
