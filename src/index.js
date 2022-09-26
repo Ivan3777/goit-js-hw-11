@@ -42,6 +42,7 @@ async function fetchImages() {
   }
 
   renderGallery(hits);
+//   imagesMarkup(renderGallery);
 
   isShow += hits.length;
 
@@ -53,7 +54,7 @@ async function fetchImages() {
 }
 
 function renderGallery(image) {
- return image
+ const markup = image
     .map(
       ({
         webformatURL,
@@ -92,6 +93,8 @@ function renderGallery(image) {
       }
     )
     .join('');
+    refs.divEl.insertAdjacentHTML('beforeend', markup);
+      simpleLightbox.refresh();
 }
 
 function imagesMarkup(data) {
