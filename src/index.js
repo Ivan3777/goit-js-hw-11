@@ -63,7 +63,7 @@ function renderGallery(image) {
         comments,
         downloads,
       }) => {
-       return `
+        return `
               <a class="gallery__link" href="${largeImageURL}">
                   <div class="photo-card">
                       <img src="${webformatURL}" alt="${tags}" loading="lazy" />
@@ -92,14 +92,15 @@ function renderGallery(image) {
     )
     .join('');
 
-    // refs.divEl.insertAdjacentHTML('beforeend', markup);
-    // simpleLightbox;
+  // refs.divEl.insertAdjacentHTML('beforeend', markup);
+  // simpleLightbox;
 }
 
-function appendImagesMarkup (data) {
-    refs.divEl.insertAdjacentHTML('beforeend',  Markup.renderGallery(data.hits));
-    simpleLightbox.refresh();
+function appendImagesMarkup(data) {
+  refs.divEl.insertAdjacentHTML('beforeend', renderGallery(data.hits));
+  simpleLightbox.refresh();
 }
+
 
 // infinite scroll
 
@@ -121,53 +122,3 @@ const options = {
 const observer = new IntersectionObserver(onEntry, options);
 
 observer.observe(refs.observerEl);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// const options = {
-//   rootMargin: '150px',
-// };
-
-// const onEntry = entries => {
-//     entries.forEach(entry => {
-//       if (entry.isIntersecting && entry.boundingClientRect.bottom > 300) {
-//         NewApiImageService.icrementPage();
-
-//         NewApiImageService.fetchImages().then(images => {
-//             renderGallery(images);
-//           simpleLightbox.refresh();
-//         });
-//       }
-//     });
-//   };
-
-//   const observer = new IntersectionObserver(onEntry, {
-//     rootMargin: '150px',
-//   });
