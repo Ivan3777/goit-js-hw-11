@@ -14,47 +14,36 @@ const simpleLightbox = new SimpleLightbox('.gallery a');
 
 const ImagesApi = new NewApiImageService();
 
-let isShow = 0;
+let totalPages = 1;
 
 refs.formEl.addEventListener('submit', onFormSubmit);
 
 function onFormSubmit(event) {
   event.preventDefault();
-  isShow = 0;
   refs.divEl.innerHTML = '';
   ImagesApi.resetPage();
   ImagesApi.query = event.target.elements.searchQuery.value.trim();
   if (ImagesApi.query === '') {
     return Notiflix.Notify.warning('Please enter a query');
   }
-  
+
   fetchImages();
 }
 
 async function fetchImages() {
   const response = await ImagesApi.fetchImage();
-  const { hits, total } = response;
-
+  const { hits, totalHits } = response;
+  totalPages = Math.ceil(totalHits / 40);
   if (!hits.length) {
     Notiflix.Notify.failure(
       'Sorry, there are no images matching your search query. Please try again.'
     );
   }
-
-  renderGallery(hits);
-//   imagesMarkup(renderGallery);
-
-  isShow += hits.length;
-
-  if (isShow >= total) {
-    Notiflix.Notify.info(
-      'We are sorry, but you have reached the end of search results.'
-    );
-  }
+  imagesMarkup(response);
 }
 
 function renderGallery(image) {
- const markup = image
+  return image
     .map(
       ({
         webformatURL,
@@ -93,26 +82,28 @@ function renderGallery(image) {
       }
     )
     .join('');
-    refs.divEl.insertAdjacentHTML('beforeend', markup);
-      simpleLightbox.refresh();
 }
 
 function imagesMarkup(data) {
   refs.divEl.insertAdjacentHTML('beforeend', renderGallery(data.hits));
   simpleLightbox.refresh();
+  if (ImagesApi.page === totalPages) {
+    Notiflix.Notify.info(
+      'We are sorry, but you have reached the end of search results.'
+    );
+  }
+  ImagesApi.incrementPage();
 }
-
 
 // infinite scroll
 
 const onEntry = entries => {
   entries.forEach(entry => {
     if (entry.isIntersecting && ImagesApi.query !== '') {
-        ImagesApi.incrementPage();
-        ImagesApi.fetchImage().then(images => {
-            imagesMarkup(images);
-            simpleLightbox.refresh();
-        });
+      ImagesApi.fetchImage().then(images => {
+        imagesMarkup(images);
+        simpleLightbox.refresh();
+      });
     }
   });
 };
