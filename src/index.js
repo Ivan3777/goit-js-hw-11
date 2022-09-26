@@ -27,6 +27,7 @@ function onFormSubmit(event) {
   if (ImagesApi.query === '') {
     return Notiflix.Notify.warning('Please enter a query');
   }
+  
   fetchImages();
 }
 
@@ -52,7 +53,7 @@ async function fetchImages() {
 }
 
 function renderGallery(image) {
-  return image
+ return image
     .map(
       ({
         webformatURL,
@@ -91,12 +92,9 @@ function renderGallery(image) {
       }
     )
     .join('');
-
-  // refs.divEl.insertAdjacentHTML('beforeend', markup);
-  // simpleLightbox;
 }
 
-function appendImagesMarkup(data) {
+function imagesMarkup(data) {
   refs.divEl.insertAdjacentHTML('beforeend', renderGallery(data.hits));
   simpleLightbox.refresh();
 }
@@ -106,12 +104,12 @@ function appendImagesMarkup(data) {
 
 const onEntry = entries => {
   entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      ImagesApi.incrementPage();
-      ImagesApi.fetchImage().then(images => {
-        appendImagesMarkup(images);
-        simpleLightbox.refresh();
-      });
+    if (entry.isIntersecting && ImagesApi.query !== '') {
+        ImagesApi.incrementPage();
+        ImagesApi.fetchImage().then(images => {
+            imagesMarkup(images);
+            simpleLightbox.refresh();
+        });
     }
   });
 };
