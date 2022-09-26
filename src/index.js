@@ -7,7 +7,10 @@ import NewApiImageService from './searchQuery';
 const refs = {
   formEl: document.querySelector('#search-form'),
   divEl: document.querySelector('.gallery'),
+  observerEl: document.querySelector('#sentinel'),
 };
+
+const simpleLightbox = new SimpleLightbox('.gallery a');
 
 const ImagesApi = new NewApiImageService();
 
@@ -21,6 +24,9 @@ function onFormSubmit(event) {
   refs.divEl.innerHTML = '';
   ImagesApi.resetPage();
   ImagesApi.query = event.target.elements.searchQuery.value.trim();
+  if (ImagesApi.query === '') {
+    return Notiflix.Notify.warning('Please enter a query');
+  }
   fetchImages();
 }
 
@@ -43,14 +49,10 @@ async function fetchImages() {
       'We are sorry, but you have reached the end of search results.'
     );
   }
-
-  if (ImagesApi.query === '') {
-    Notiflix.Notify.warning('Please enter a query');
-  }
 }
 
-function renderGallery(elements) {
-  const markup = elements
+function renderGallery(image) {
+  return image
     .map(
       ({
         webformatURL,
@@ -61,7 +63,7 @@ function renderGallery(elements) {
         comments,
         downloads,
       }) => {
-        return `
+       return `
               <a class="gallery__link" href="${largeImageURL}">
                   <div class="photo-card">
                       <img src="${webformatURL}" alt="${tags}" loading="lazy" />
@@ -90,24 +92,82 @@ function renderGallery(elements) {
     )
     .join('');
 
-  refs.divEl.insertAdjacentHTML('beforeend', markup);
-  const simpleLightbox = new SimpleLightbox('.gallery a');
+    // refs.divEl.insertAdjacentHTML('beforeend', markup);
+    // simpleLightbox;
 }
 
-// const headerEl = document.querySelector('form.form');
+function appendImagesMarkup (data) {
+    refs.divEl.insertAdjacentHTML('beforeend',  Markup.renderGallery(data.hits));
+    simpleLightbox.refresh();
+}
 
-// let previousPosition = 0;
+// infinite scroll
 
-// const onPageScroll = () => {
-//   if (previousPosition < window.scrollY - 50 && window.scrollY > 80)
-//   headerEl.classList.add('is-hidden');
-//   if (previousPosition > window.scrollY + 200 || window.scrollY < 80)
-//   headerEl.classList.remove('is-hidden');
+const onEntry = entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      ImagesApi.incrementPage();
+      ImagesApi.fetchImage().then(images => {
+        appendImagesMarkup(images);
+        simpleLightbox.refresh();
+      });
+    }
+  });
+};
 
-//   previousPosition = window.scrollY;
+const options = {
+  rootMargin: '150px',
+};
+const observer = new IntersectionObserver(onEntry, options);
 
-//   window.addEventListener('scroll', throttle(onPageScroll, 200));
+observer.observe(refs.observerEl);
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// const options = {
+//   rootMargin: '150px',
 // };
 
+// const onEntry = entries => {
+//     entries.forEach(entry => {
+//       if (entry.isIntersecting && entry.boundingClientRect.bottom > 300) {
+//         NewApiImageService.icrementPage();
 
+//         NewApiImageService.fetchImages().then(images => {
+//             renderGallery(images);
+//           simpleLightbox.refresh();
+//         });
+//       }
+//     });
+//   };
+
+//   const observer = new IntersectionObserver(onEntry, {
+//     rootMargin: '150px',
+//   });
